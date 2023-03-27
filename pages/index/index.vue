@@ -62,7 +62,7 @@ export default {
 			vertical: true, // 滑动方向是否为纵向
 			height: '100vh',
 			autoplay: true,
-			interval: 5000, //自动切换时长，单位ms
+			interval: 10000, //自动切换时长，单位ms
 			mousewheel: true, // 鼠标滚轮控制Swiper切换
 			indicatorDots:true,
 			indicatorActiveColor: '#ffffff',
