@@ -2,9 +2,6 @@
 	"pages": [
 		{
 			"path": "pages/index/index"
-		},
-		{
-			"path": "pages/out-link/out-link"
 		}
 	],
 	"globalStyle": {
