@@ -4,18 +4,18 @@
     <!-- <view class="page-title">联系我</view> -->
     <view class="page-container">
       <view class="experience">
-        <h3>个人能力</h3>
+        <view class="title-h3">个人能力</view>
         <view class="content" v-for="(item,index) in contact.experiences" :key="index">
           <p class="p-item">{{item}}</p>
         </view>
         <!-- {{contact.experience}} -->
       </view>
       <view class="evaluation">
-        <h3>自我评价</h3>
+        <view class="title-h3">自我评价</view>
         <view class="content">{{contact.evaluation}}</view>
       </view>
       <view class="socials">
-        <h3>社交帐号</h3>
+        <view class="title-h3">社交帐号</view>
         <view class="box">
           <view v-for="(item, index) in contact.socials" :key="index">
             <view v-if="item.url"  class="socials-item" @click="toOutLink(item.url)">
@@ -32,7 +32,7 @@
         </view>
       </view>
       <view class="contact-me">
-        <h3>联系方式</h3>
+        <view class="title-h3">联系方式</view>
         <view class="call">
           <i class="iconfont icon-shoujihao"></i>
            <text class="text" @click="call">{{ contact.tel }}</text>

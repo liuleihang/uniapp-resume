@@ -6,10 +6,9 @@
 	],
 	"globalStyle": {
 		"navigationStyle":"custom",
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "刘磊航的简历",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {}
 }

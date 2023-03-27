@@ -1,5 +1,7 @@
 <template>
   <view class="resume">
+    <navbar class="header" :title="title">
+    </navbar>
     <swiper
       name="pageCarousel"
       ref="pageCarousel" 
@@ -34,6 +36,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import navbar from '../../components/navbar/navbar.vue'
 import info from 'pages/info/info.vue'
 import skills from 'pages/skills/skills.vue'
 import profiles from 'pages/profiles/profiles.vue'
@@ -42,6 +45,7 @@ import contact from 'pages/contact/contact.vue'
 export default {
   name: 'Resume',
   components: {
+    navbar,
     info,
     skills,
     profiles,
@@ -50,6 +54,7 @@ export default {
   },
   data() {
     return {
+      title: '刘磊航的简历',
 			startPoint: 0,
 			stopPoint: 0,
 			spaceBetween: 30,
