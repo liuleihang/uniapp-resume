@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "info": "/pages/info/info",
+    "skills": "/pages/skills/skills",
+    "profiles": "/pages/profiles/profiles",
+    "career": "/pages/career/career",
+    "contact": "/pages/contact/contact"
+  }
+}
