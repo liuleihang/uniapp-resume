@@ -35,15 +35,17 @@
         <h3>联系方式</h3>
         <view class="call">
           <i class="iconfont icon-shoujihao"></i>
-          <uni-link :href="`tel:${contact.tel}`" :showUnderLine="showUnderLine">
+           <text class="text" @click="call">{{ contact.tel }}</text>
+          <!-- <uni-link :href="`tel:${contact.tel}`" :showUnderLine="showUnderLine">
             <text class="text">{{ contact.tel }}</text>
-          </uni-link>
+          </uni-link> -->
         </view>
         <view class="call">
           <i class="iconfont icon-youxiang"></i>
-          <uni-link :href="`mailto:${contact.email}`" :showUnderLine="showUnderLine">
+          <text class="text" @click="copy(contact.email)">{{ contact.email }}</text>
+          <!-- <uni-link :href="`mailto:${contact.email}`" :showUnderLine="showUnderLine">
             <text class="text">{{ contact.email }}</text>
-          </uni-link>
+          </uni-link> -->
         </view>
       </view>
       <view v-show="isShowPop" class='popContainer' @click="isShowPop=!isShowPop">
@@ -64,14 +66,31 @@ export default {
       isShowPop: false,
       qrCodeImage: '/static/images/qrCode.png',
       showUnderLine: false,
-      copyTips: '已自动复制网址，请在浏览器丽粘贴网址'
+      copyTips: '复制成功',
+      copyUrlTips: '已自动复制网址，请在浏览器丽粘贴网址'
     }
   },
   methods: {
-    copy(str){
+    copy(str,toastStr = this.copyTips){
       uni.setClipboardData({
         data: str, //要被复制的内容
         success: () => { //复制成功的回调函数
+          uni.hideToast();
+          uni.showToast({
+            title: toastStr,
+            duration: 2000,
+            icon: 'none'
+          });
+        }
+      });
+    },
+    call(){
+      uni.makePhoneCall({
+        phoneNumber: contact.tel,
+        success: () => {
+          
+        },
+        fail: () => {
           
         }
       });
@@ -106,17 +125,7 @@ export default {
       // #endif
 
       // #ifdef MP-WEIXIN
-      uni.setClipboardData({
-        data: src, //要被复制的内容
-        success: () => { //复制成功的回调函数
-          uni.hideToast();
-          uni.showToast({
-            title: this.copyTips,
-            duration: 2000,
-            icon: 'none'
-          });
-        }
-      });
+      this.copy(src,this.copyUrlTips)
       //个人小程序不支持外链跳转
       // uni.navigateTo({
       //   url: '/pages/out-link/out-link?src='+ src
