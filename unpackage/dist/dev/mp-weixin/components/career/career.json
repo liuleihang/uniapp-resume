@@ -1,8 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "timeline": "/components/timeline/timeline",
-    "time-line": "/components/timeline/timeline",
-    "timeline-item": "/components/timeline/timeline-item"
-  }
-}
