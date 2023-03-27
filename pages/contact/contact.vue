@@ -49,7 +49,7 @@
         </view>
       </view>
       <view v-show="isShowPop" class='popContainer' @click="isShowPop=!isShowPop">
-        <img :src="qrCodeImage" alt="" >
+        <image class="img" :src="qrCodeImage" :show-menu-by-longpress="true">
       </view>
     </view>
   </view>
@@ -226,7 +226,7 @@ export default {
       top:0;
       bottom:0;
       // background: rgba(0,0,0,0.3);
-      img {
+      .img {
         width: 200px;
         height: 200px;
         position: fixed;
