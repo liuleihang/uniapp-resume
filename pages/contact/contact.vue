@@ -35,13 +35,13 @@
         <h3>联系方式</h3>
         <view class="call">
           <i class="iconfont icon-shoujihao"></i>
-          <uni-link :href="`tel:${contact.tel}`" :showUnderLine="showUnderLine" :copyTips="copyTips">
+          <uni-link :href="`tel:${contact.tel}`" :showUnderLine="showUnderLine">
             <text class="text">{{ contact.tel }}</text>
           </uni-link>
         </view>
         <view class="call">
           <i class="iconfont icon-youxiang"></i>
-          <uni-link :href="`mailto:${contact.email}`" :showUnderLine="showUnderLine" :copyTips="copyTips">
+          <uni-link :href="`mailto:${contact.email}`" :showUnderLine="showUnderLine">
             <text class="text">{{ contact.email }}</text>
           </uni-link>
         </view>
@@ -64,19 +64,15 @@ export default {
       isShowPop: false,
       qrCodeImage: '/static/images/qrCode.png',
       showUnderLine: false,
-      copyTips: '已复制'
+      copyTips: '已自动复制网址，请在浏览器丽粘贴网址'
     }
   },
   methods: {
-    copy(){
-      const email = this.contact.email
+    copy(str){
       uni.setClipboardData({
-        data: email, //要被复制的内容
+        data: str, //要被复制的内容
         success: () => { //复制成功的回调函数
-          uni.showToast({
-            title: '复制成功',
-            duration: 3000
-          });
+          
         }
       });
     },
@@ -110,9 +106,21 @@ export default {
       // #endif
 
       // #ifdef MP-WEIXIN
-      uni.navigateTo({
-        url: '/pages/out-link/out-link?src='+ src
-      })
+      uni.setClipboardData({
+        data: src, //要被复制的内容
+        success: () => { //复制成功的回调函数
+          uni.hideToast();
+          uni.showToast({
+            title: this.copyTips,
+            duration: 2000,
+            icon: 'none'
+          });
+        }
+      });
+      //个人小程序不支持外链跳转
+      // uni.navigateTo({
+      //   url: '/pages/out-link/out-link?src='+ src
+      // })
       // #endif
     }
   }
