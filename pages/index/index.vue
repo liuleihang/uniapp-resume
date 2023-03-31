@@ -1,7 +1,6 @@
 <template>
-  <view class="resume">
-    <navbar class="header" :title="title">
-    </navbar>
+  <view ref="resume" class="resume">
+    <navbar :title="title"></navbar>
     <swiper
       name="pageCarousel"
       ref="pageCarousel" 
@@ -11,37 +10,44 @@
 			:vertical="vertical"
 			:autoplay="autoplay"
 			:interval="interval"
-			:mousewheel="mousewheel"
 			:indicator-dots="indicatorDots"
+      :easing-function="easing"
 			:indicator-active-color="indicatorActiveColor"
+      :current="swiperCurrentIndex"
       @change="changePage"
     >
       <swiper-item>
-        <info ref="info" id="info" :pageIndex="0"></info>
+        <info ref="info" class="swiper-item" :pageIndex="0"></info>
       </swiper-item>
       <swiper-item>
-        <skills ref="skills" id="skills" :pageIndex="1"></skills>
+        <skills ref="skills" class="swiper-item" :pageIndex="1"></skills>
       </swiper-item>
       <swiper-item>
-        <profiles ref="profiles" id="profiles" :pageIndex="2"></profiles>
+        <profiles ref="profiles" class="swiper-item" :pageIndex="2"></profiles>
       </swiper-item>
       <swiper-item>
-        <career ref="career" id="profiles" :pageIndex="3"></career>
+        <career ref="career" class="swiper-item" :pageIndex="3"></career>
       </swiper-item>
       <swiper-item>
-        <contact ref="contact" id="contact" :pageIndex="4"></contact>
+        <contact ref="contact" class="swiper-item" :pageIndex="4"></contact>
       </swiper-item>
     </swiper>
+    <view class="pdf-box" @click="previewPdf">
+      <view class="pdf-tool">
+        <i class="iconfont icon-pdf"></i>
+      </view>
+    </view>
   </view>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import navbar from '../../components/navbar/navbar.vue'
+import navbar from 'components/navbar/navbar.vue'
 import info from 'pages/info/info.vue'
 import skills from 'pages/skills/skills.vue'
 import profiles from 'pages/profiles/profiles.vue'
 import career from 'pages/career/career.vue'
 import contact from 'pages/contact/contact.vue'
+import { resumePdfUrl } from 'data/index.js'
 export default {
   name: 'Resume',
   components: {
@@ -50,7 +56,7 @@ export default {
     skills,
     profiles,
     career,
-    contact
+    contact,
   },
   data() {
     return {
@@ -61,37 +67,66 @@ export default {
 			effect: 'fade',
 			vertical: true, // 滑动方向是否为纵向
 			height: '100vh',
-			autoplay: true,
+			autoplay: false,
 			interval: 10000, //自动切换时长，单位ms
-			mousewheel: true, // 鼠标滚轮控制Swiper切换
 			indicatorDots:true,
 			indicatorActiveColor: '#ffffff',
+      easing: 'linear',
+      swiperCurrentIndex: 0,
 			skillsPageIndex: 1,
+      totalPage: 0,
     }
   },
   computed: {
     ...mapState(['activeIndex'])
   },
+  watch: {
+    swiperCurrentIndex(newVal){
+      
+    }
+  },
+  created(){
+  },
   mounted(){
-		
+    // #ifdef H5
+    // 以下三种方法都可以
+    // document.querySelector('.resume').addEventListener('wheel', this.rollScroll)
+    // window.onmousewheel=document.onmousewheel=this.rollScroll
+    this.$refs.resume.$el.addEventListener('mousewheel', this.rollScroll)
+    // swiper页数
+    this.totalPage = document.querySelectorAll('.page-item').length;
+    // #endif
   },
   methods: {
     ...mapActions(['changeActiveIndex']),
-    rollScroll(event) {
+    rollScroll(event) { //鼠标滚轮事件方法
       let _that = this;
+      // 最后一页的索引
+      const totalPageIndex = this.totalPage - 1;
       // chrome、ie使用的wheelDelta，火狐使用detail
       let scrollVal = event.wheelDelta || event.detail;
+      // 当前时第一页时，滚轮向上滑切换到最后一页,此处有问题，会自动跳到倒数第二页
+      if(scrollVal > 0 && _that.swiperCurrentIndex === 0) {
+        //  _that.swiperCurrentIndex = totalPageIndex;
+        return;
+      }
       // 节流
       if (!_that.timeOut) {
         _that.timeOut = setTimeout(() => {
           _that.timeOut = null;
-          scrollVal > 0
-            ? _that.$refs.pageCarousel.prev()
-            : _that.$refs.pageCarousel.next();
+          if(scrollVal > 0){
+            _that.swiperCurrentIndex > 0 && _that.swiperCurrentIndex--; //上一页
+          }else{
+            if (this.swiperCurrentIndex === totalPageIndex) {
+              this.swiperCurrentIndex = 0;
+              return
+            }
+            _that.swiperCurrentIndex++; //下一页
+          }
         }, 300);
       } else {
       }
-    }, 
+    },
     //是否自动播放
     stopAuto() {
       this.autoplay = false;
@@ -99,7 +134,7 @@ export default {
     startAuto() {
       this.autoplay = true;
     },
-		touchstart(e){
+		/* touchstart(e){
 			//手指点击位置的Y坐标
 			this.startPoint = e.changedTouches[0].pageY;
 		},
@@ -133,13 +168,61 @@ export default {
 		resetPoint () {
 			this.startPoint = 0;
 			this.stopPoint = 0;
-		},
-    changePage({ detail }){
+		}, */
+    changePage({ detail }){ //更新swiper当前index
 			let currentIndex = detail.current;
-			let skillsPageIndex = this.skillsPageIndex;
-      // console.log('skills.changePage>>>currentIndex ',currentIndex)
-      // console.log('skills.changePage>>>skillsPageIndex ',skillsPageIndex)
+      this.swiperCurrentIndex = currentIndex;
       this.changeActiveIndex(currentIndex);
+    },
+    previewPdf(){
+      // #ifdef MP-WEIXIN
+      this.openDocument(resumePdfUrl);
+      // #endif
+      // #ifdef H5
+      uni.navigateTo({
+        url:'/pages/web-view/web-view'
+      })
+      // #endif
+    },
+    openDocument(url){
+      /* wx.downloadFile({
+        url: url,
+        success: function(res) {
+          const filePath = res.tempFilePath;
+          wx.openDocument({
+            filePath: filePath,
+            fileType: 'pdf',
+            success: function(res) {
+              console.log('打开文档成功');
+            }
+          });
+        }
+      }); */
+      uni.showLoading({
+        title: '加载中'
+      });
+      uni.downloadFile({
+        url: url,
+        success: function(res) {
+          const filePath = res.tempFilePath;
+          uni.openDocument({
+            filePath: filePath,
+            fileType: 'pdf',
+            showMenu: true,
+            success: function(res) {
+              uni.hideLoading();
+            },
+            fail:(res)=>{
+              uni.hideLoading();
+              uni.showToast({
+                icon:'none',
+                title:'文件打开失败',
+                duration:2000
+              })
+            }
+          });
+        }
+      });
     }
   }
 }
@@ -150,13 +233,30 @@ export default {
   /* background-color: rgba(22,88,57,.897); */
   height: 100vh;
   overflow: hidden;
-
   .pageCarousel {
     height: 100vh;
   }
-}
-
-.resume .swiper-container {
-  height: 100vh;
+  .pdf-box {
+    position: fixed;
+    z-index: 1;
+    right: 20px;
+    bottom: 20px;
+    .pdf-tool {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,.3);
+      margin-top: 10px;
+      display: flex;
+      vertical-align: top;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      cursor: pointer;
+      .icon-pdf {
+        font-size: 25px;
+      }
+    }
+  }
 }
 </style>

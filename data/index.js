@@ -48,9 +48,9 @@ export const profiles = [
   },
   {
     title: 'vue-resume',
-    subTitle: 'vue在线简历',
-    skills: 'uniapp',
-    text: 'vue2 开发的线上个人简历作品，有H5版本和微信小程序版本。',
+    subTitle: '个人简历',
+    skills: 'vue2 + element-ui、uniapp',
+    text: '起初是vue2 开发的H5版本，后来使用uniapp开发了微信小程序版本',
     github: 'https://github.com/liuleihang/vue-resume'
   }
 ]
@@ -77,13 +77,14 @@ export const career = [
 ]
 export const contact = {
   experiences: [
-    '熟练掌握Vue 技术栈，包括 vue2、vuex、vue-router、vant-ui、element-ui等；', 
-    '熟练掌握 JavaScript、HTML、CSS，掌握 ES6 语法；', 
-    '熟练掌握前端构建工具，如 Webpack、npm；',
-    '熟练掌握前端基础库，包括 jQuery、Axios、Bootstrap；',
-    '有处理 IE 浏览器和谷歌浏览器的兼容性问题的经验；',
-    '熟悉 Nodejs 开发，并对 MongoDB 有一定的了解；',
-    '熟悉 Linux 系统和Nginx 的基本使用，进行反向代理和负载均衡配置；'
+    '熟练掌握Vue技术栈，包括vue2、vuex、vue-router、vant-ui、element-ui等；', 
+    '熟练掌握JavaScript、HTML、CSS，掌握ES6语法；', 
+    '熟练掌握前端构建工具，如Webpack、npm；',
+    '熟练掌握前端基础库，包括jQuery、Axios、Bootstrap；',
+    '有处理IE浏览器和谷歌浏览器的兼容性问题的经验；',
+    '熟悉Nodejs开发，并对MongoDB有一定的了解；',
+    '熟悉Linux系统和Nginx 的基本使用，进行反向代理和负载均衡配置；',
+    '了解uniapp微信小程序开发，个人微信小程序：刘磊航的简历'
   ],
   evaluation: '为人乐观积极向上，性格开朗，爱好知识社区。',
   // hobby: [],
@@ -117,3 +118,4 @@ export const contact = {
     } */
   ]
 }
+export const resumePdfUrl = 'https://www.liuleihang.cn/static/files/刘磊航-web前端开发.pdf'

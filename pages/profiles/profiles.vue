@@ -1,5 +1,5 @@
 <template>
-  <view class="page-item profiles">
+  <view class="page-item section">
     <!-- <view class="page-title">作品</view> -->
     <view class="page-container">
       <swiper
@@ -23,10 +23,10 @@
               <view class="card-title-container">技术栈： {{ profile.skills }}</view>
               <view class="card-text">{{ profile.text }}</view>
               <view class="card-actions" v-if="profile.github">
-                <uni-link class="link" :href="profile.github" :text="profile.github">
+                <view class="link" @click="toOutLink(profile.github)">
                   <i class="icon iconfont icon-github-fill"></i>
                   <!-- <text class="text">{{ profile.github }}</text> -->
-                </uni-link>
+                </view>
               </view>
             </view>
           </view>
@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { profiles } from "@/data/index.js";
+import { profiles } from "@/data/index.js"
+import { copyData } from "@/utils/uniTool.js"
 export default {
   name: "Profiles",
   data() {
@@ -51,14 +52,29 @@ export default {
       interval: 10000, //自动切换时长，单位ms
       mousewheel: true,
       indicatorDots: true,
-      indicatorActiveColor: "#ffffff"
+      indicatorActiveColor: "#ffffff",
+      copyUrlTips: '已自动复制网址，请在浏览器里粘贴网址'
     };
+  },
+  methods: {
+    toOutLink(src){
+      // #ifdef H5
+      window.open(src)
+      // #endif
+      // #ifdef MP-WEIXIN
+      copyData(src,this.copyUrlTips)
+      //个人小程序不支持外链跳转
+      // uni.navigateTo({
+      //   url: '/pages/out-link/out-link?src='+ src
+      // })
+      // #endif
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.profiles {
+.section {
   background-color: rgb(23, 158, 140) !important;
 
   // color: #000;

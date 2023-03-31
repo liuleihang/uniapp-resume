@@ -9,6 +9,9 @@ import 'animate.css'
 import './static/iconfont/iconfont.css'
 import './static/styles/style.scss'
 import './static/styles/weixin.scss'
+import share from '@/common/share.js'
+
+Vue.mixin(share)
 
 try {
   function isPromise(obj) {

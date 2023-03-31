@@ -1,5 +1,5 @@
 <template>
-  <view class="navbar" :style="{background,color,height:statusBarHeight+navBareight +'px'}">
+  <view class="navbar" :style="{background,color,height:statusBarHeight+navBareight +'px'}" v-if="isShowNavBar">
 		<view :style="{height:statusBarHeight+'px'}"></view>
 		<view class="navbar-content">
 			<!-- <view class="navbar-left" @click="onBack" v-if="back" :style="[{color},{paddingTop}]">
@@ -14,6 +14,7 @@ export default {
   name: "NavBar",
   data() {
     return {
+      isShowNavBar: false,
       statusBarHeight: 0,
       navBareight: 40,
       windowWidth: 375
@@ -23,7 +24,7 @@ export default {
     title: {
       // 标题文字(默认为空)
       type: String,
-      default: "#fff"
+      default: "刘磊航的简历"
     },
     color: {
       // 标题和返回按钮颜色(默认白色)
@@ -43,13 +44,15 @@ export default {
       default: false
     }
   },
-
   created() {
+    // #ifdef MP-WEIXIN
+    //微信小程序显示title
+    this.isShowNavBar = true;
+    // #endif
     //获取手机系统信息 -- 状态栏高度
     let { statusBarHeight, windowWidth } = uni.getSystemInfoSync();
     this.statusBarHeight = statusBarHeight;
     this.windowWidth = windowWidth;
-    console.log("navbar.mounted ", statusBarHeight, windowWidth);
   }
   /*
 		methods: {

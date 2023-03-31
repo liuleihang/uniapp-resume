@@ -20,10 +20,6 @@
           <view v-for="(item, index) in contact.socials" :key="index">
             <view v-if="item.url"  class="socials-item" @click="toOutLink(item.url)">
               <i class="iconfont" :class="item.icon"></i>
-              <!-- <uni-icons class="iconfont" custom-prefix="iconfont" type="icon-juejin" size="30"></uni-icons> -->
-              <!-- <uni-link :href="item.url">
-                <uni-icons class="iconfont" custom-prefix="iconfont" type="icon-juejin" size="30"></uni-icons>
-              </uni-link> -->
             </view>
             <view v-if="!item.url" class="socials-item" @click="isShowPop=!isShowPop">
               <i class="iconfont" :class="item.icon"></i>
@@ -35,14 +31,14 @@
         <view class="title-h3">联系方式</view>
         <view class="call">
           <i class="iconfont icon-shoujihao"></i>
-           <text class="text" @click="call">{{ contact.tel }}</text>
+          <text class="text" @click="call">{{ contact.tel }}</text>
           <!-- <uni-link :href="`tel:${contact.tel}`" :showUnderLine="showUnderLine">
             <text class="text">{{ contact.tel }}</text>
           </uni-link> -->
         </view>
         <view class="call">
           <i class="iconfont icon-youxiang"></i>
-          <text class="text" @click="copy(contact.email)">{{ contact.email }}</text>
+          <text class="text" @click="copyData(contact.email)">{{ contact.email }}</text>
           <!-- <uni-link :href="`mailto:${contact.email}`" :showUnderLine="showUnderLine">
             <text class="text">{{ contact.email }}</text>
           </uni-link> -->
@@ -57,6 +53,7 @@
 <script>
 
 import { contact } from '@/data/index.js'
+import { copyData } from "@/utils/uniTool.js"
 export default {
   name: 'Contact',
   data(){
@@ -66,24 +63,11 @@ export default {
       isShowPop: false,
       qrCodeImage: '/static/images/qrCode.png',
       showUnderLine: false,
-      copyTips: '复制成功',
-      copyUrlTips: '已自动复制网址，请在浏览器丽粘贴网址'
+      copyUrlTips: '已自动复制网址，请在浏览器里粘贴网址'
     }
   },
   methods: {
-    copy(str,toastStr = this.copyTips){
-      uni.setClipboardData({
-        data: str, //要被复制的内容
-        success: () => { //复制成功的回调函数
-          uni.hideToast();
-          uni.showToast({
-            title: toastStr,
-            duration: 2000,
-            icon: 'none'
-          });
-        }
-      });
-    },
+    copyData,
     call(){
       uni.makePhoneCall({
         phoneNumber: contact.tel,
@@ -96,7 +80,6 @@ export default {
       });
     },
     previewImage(e) {
-      console.log('e', e);
       const qrCodeImage = this.qrCodeImage;
       uni.previewImage({
         // 需要预览的图片链接列表
@@ -125,7 +108,7 @@ export default {
       // #endif
 
       // #ifdef MP-WEIXIN
-      this.copy(src,this.copyUrlTips)
+      copyData(src,this.copyUrlTips)
       //个人小程序不支持外链跳转
       // uni.navigateTo({
       //   url: '/pages/out-link/out-link?src='+ src
